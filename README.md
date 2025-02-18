@@ -135,3 +135,15 @@ little-lemon-food-ordering-app/
 ## License
 
 This project is for educational purposes only.
+
+## Author
+
+Quang Pham
+
+## Demo
+
+### Preview
+![Simulator Screenshot - iPhone 15 Pro Max - 2025-02-18 at 21 48 10](https://github.com/user-attachments/assets/55b236b1-120f-470a-b148-5a5c45808d57)
+![Simulator Screenshot - iPhone 15 Pro Max - 2025-02-18 at 21 49 36](https://github.com/user-attachments/assets/396b5106-dad4-4364-bb17-1bd44f539e90)
+![Simulator Screenshot - iPhone 15 Pro Max - 2025-02-18 at 21 50 02](https://github.com/user-attachments/assets/8bc23045-8a55-4248-806e-fc41c3e56f69)
+![Simulator Screenshot - iPhone 15 Pro Max - 2025-02-18 at 21 49 51](https://github.com/user-attachments/assets/7e9b083a-a375-456b-ba1b-14fc13ebd8cb)
