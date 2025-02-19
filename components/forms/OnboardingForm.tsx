@@ -18,7 +18,7 @@ export function OnboardingForm({
   onSubmit,
 }: OnboardingFormProps) {
   return (
-    <Box style={styles.form}>
+    <Box>
       <Input
         label="Name"
         required
@@ -44,13 +44,12 @@ export function OnboardingForm({
         error={fields.email.touched ? fields.email.error : undefined}
       />
 
-      <Button title="Next" onPress={onSubmit} style={{ marginTop: 16 }} />
+      <Button
+        variant="secondary"
+        title="Next"
+        onPress={onSubmit}
+        style={{ width: '100%', marginTop: 16 }}
+      />
     </Box>
   )
 }
-
-const styles = StyleSheet.create({
-  form: {
-    padding: 16,
-  },
-})

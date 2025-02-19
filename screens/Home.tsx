@@ -57,7 +57,7 @@ export default function HomeScreen() {
   if (error) {
     return (
       <SafeAreaView>
-        <Box style={{ backgroundColor: '#495E57' }}>
+        <Box backgroundColor="#495E57">
           <ThemedText type="title">Unable to Load Products</ThemedText>
           <ThemedText type="subtitle">
             {error || 'An unexpected error occurred'}

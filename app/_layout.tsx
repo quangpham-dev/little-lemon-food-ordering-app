@@ -67,7 +67,7 @@ export default function RootLayout() {
 }
 
 function NavigationContent() {
-  const { theme } = useTheme()
+  const { isDark } = useTheme()
   const { isAuthenticated, isLoading } = useAuth()
 
   if (isLoading) {
@@ -75,14 +75,13 @@ function NavigationContent() {
   }
 
   return (
-    <ReactNavigationThemeProvider
-      value={theme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ReactNavigationThemeProvider value={isDark ? DarkTheme : DefaultTheme}>
       {isAuthenticated ? (
         <Redirect href="/(app)/home" />
       ) : (
         <Redirect href="/(auth)/onboarding" />
       )}
-      <StatusBar style={theme === 'dark' ? 'light' : 'dark'} />
+      <StatusBar style={isDark ? 'light' : 'dark'} />
     </ReactNavigationThemeProvider>
   )
 }

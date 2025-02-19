@@ -53,8 +53,10 @@ export const ProductItem = memo(function ProductItem({
       flexDirection="row"
       justifyContent="space-between"
       alignItems="center"
-      style={styles.container}>
-      <Box style={styles.content}>
+      borderBottomWidth={1}
+      borderColor="#cccccc"
+      paddingVertical={10}>
+      <Box flex={1} paddingRight={10}>
         <ThemedText type="subtitle" style={styles.title}>
           {name}
         </ThemedText>

@@ -1,14 +1,11 @@
 import React from 'react'
 import {
-  View,
   Text,
   StyleSheet,
-  Pressable,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
   Alert,
-  TouchableOpacity,
 } from 'react-native'
 import { useRouter } from 'expo-router'
 
@@ -19,6 +16,8 @@ import { AvatarSection } from '@/components/profile/AvatarSection'
 import { PersonalInfoSection } from '@/components/profile/PersonalInfoSection'
 import { NotificationPreferences } from '@/components/profile/NotificationPreferences'
 import { SafeAreaView } from '@/components/ui/SafeAreaView'
+import { Button } from '@/components/ui/Button'
+import { Box } from '@/components/ui/Box'
 
 export default function ProfileScreen() {
   const router = useRouter()
@@ -96,22 +95,35 @@ export default function ProfileScreen() {
           onUpdateProfile={(key, value) => updateProfile(key, value)}
         />
 
-        <Pressable style={styles.logoutButton} onPress={logout}>
-          <Text style={styles.logoutText}>Log out</Text>
-        </Pressable>
+        <Button
+          variant="secondary"
+          title="Log out"
+          onPress={logout}
+          style={{ marginTop: 24 }}
+        />
 
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={[styles.button, styles.discardButton]}
-            onPress={handleDiscard}>
-            <Text style={styles.discardButtonText}>Discard</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.button, styles.saveButton]}
-            onPress={handleSave}>
-            <Text style={styles.saveButtonText}>Save Changes</Text>
-          </TouchableOpacity>
-        </View>
+        <Box
+          flexDirection="row"
+          justifyContent="space-between"
+          marginBottom={32}
+          gap={16}>
+          <Button
+            variant="outline"
+            title="Discard"
+            onPress={handleDiscard}
+            style={{
+              flex: 1,
+            }}
+          />
+          <Button
+            variant="primary"
+            title="Save Changes"
+            onPress={handleSave}
+            style={{
+              flex: 1,
+            }}
+          />
+        </Box>
       </ScrollView>
     </KeyboardAvoidingView>
   )
@@ -120,53 +132,9 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
   },
   content: {
     flex: 1,
     padding: 16,
-  },
-  logoutButton: {
-    backgroundColor: '#F4CE14',
-    padding: 16,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginVertical: 24,
-  },
-  logoutText: {
-    fontFamily: 'Karla-Bold',
-    fontSize: 16,
-    color: '#495E57',
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 32,
-  },
-  button: {
-    flex: 1,
-    padding: 16,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  discardButton: {
-    backgroundColor: '#fff',
-    marginRight: 8,
-    borderWidth: 1,
-    borderColor: '#495E57',
-  },
-  discardButtonText: {
-    fontFamily: 'Karla-Bold',
-    fontSize: 16,
-    color: '#495E57',
-  },
-  saveButton: {
-    backgroundColor: '#495E57',
-    marginLeft: 8,
-  },
-  saveButtonText: {
-    fontFamily: 'Karla-Bold',
-    fontSize: 16,
-    color: '#fff',
   },
 })

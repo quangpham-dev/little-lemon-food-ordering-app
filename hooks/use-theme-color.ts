@@ -7,6 +7,7 @@ import { useMemo } from 'react'
 import { COLORS } from '@/themes/colors'
 import { useTheme } from '@/contexts/theme-context'
 
+type ThemeMode = 'light' | 'dark'
 type ThemeColorValue<T> = T extends object ? string | Partial<T> : string
 type ColorType<T> = T extends object ? T : string
 
@@ -15,10 +16,11 @@ export function useThemeColor<T = string>(
   colorName: keyof typeof COLORS.light & keyof typeof COLORS.dark,
 ): ColorType<T> {
   const { theme } = useTheme()
+  const currentTheme = theme.type as ThemeMode
 
   return useMemo(() => {
-    const colorFromProps = props[theme]
-    const defaultColor = COLORS[theme][colorName]
+    const colorFromProps = props[currentTheme]
+    const defaultColor = COLORS[currentTheme][colorName]
 
     if (colorFromProps) {
       if (typeof colorFromProps === 'string') {
@@ -40,5 +42,5 @@ export function useThemeColor<T = string>(
     }
 
     return defaultColor as unknown as ColorType<T>
-  }, [theme, props, colorName])
+  }, [currentTheme, props, colorName])
 }

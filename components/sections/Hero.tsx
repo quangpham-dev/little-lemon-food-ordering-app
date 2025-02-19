@@ -16,7 +16,7 @@ export function Hero({ type = 'primary', onSearch }: HeroProps) {
   }
 
   return (
-    <Box style={{ backgroundColor: '#495E57', padding: 16 }}>
+    <Box backgroundColor="#495E57" padding={16}>
       <ThemedText type="H1">Little Lemon</ThemedText>
 
       <Flex
