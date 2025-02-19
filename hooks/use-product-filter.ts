@@ -2,7 +2,7 @@ import { useState, useCallback, useMemo, useEffect } from 'react'
 import { Alert } from 'react-native'
 import debounce from 'lodash.debounce'
 
-import { Product } from '@/interfaces/product'
+import type { Product } from '@/interfaces/product'
 import { filterByQueryAndCategories } from '@/sqlite.config'
 
 interface UseProductFilterProps {
@@ -16,38 +16,53 @@ export function useProductFilter({ initialProducts }: UseProductFilterProps) {
     [],
   )
 
+  // Validate products availability
+  const validateProducts = useCallback(() => {
+    if (initialProducts.length === 0) {
+      console.warn('No products available for filtering')
+      setFilteredProductsData([])
+      return false
+    }
+    return true
+  }, [initialProducts])
+
   // Update filtered products when initial products change
   useEffect(() => {
     console.log('Initial products updated:', initialProducts.length)
     setFilteredProductsData(initialProducts)
   }, [initialProducts])
 
-  // Memoized debounced filter function
+  // Cleanup function for debounce
+  useEffect(() => {
+    return () => {
+      debouncedFilter.cancel()
+    }
+  }, [])
+
+  // Memoized filter function
+  const filterProducts = useCallback(
+    async (query: string, categories: string[]) => {
+      if (!validateProducts()) return
+
+      try {
+        const filteredProducts = await filterByQueryAndCategories(
+          query,
+          categories,
+        )
+        console.log('Filtered products:', filteredProducts.length)
+        setFilteredProductsData(filteredProducts)
+      } catch (error) {
+        console.error('Error filtering products:', error)
+        Alert.alert('Filtering Error', 'Unable to filter products')
+      }
+    },
+    [validateProducts],
+  )
+
+  // Memoized debounced filter
   const debouncedFilter = useMemo(
-    () =>
-      debounce(async (query: string, categories: string[]) => {
-        try {
-          // If no initial products, skip filtering
-          if (initialProducts.length === 0) {
-            console.warn('No products available for filtering')
-            setFilteredProductsData([])
-            return
-          }
-
-          const filteredProducts = await filterByQueryAndCategories(
-            query,
-            categories,
-          )
-
-          console.log('Filtered products:', filteredProducts.length)
-
-          setFilteredProductsData(filteredProducts)
-        } catch (error) {
-          console.error('Error filtering products:', error)
-          Alert.alert('Filtering Error', 'Unable to filter products')
-        }
-      }, 300),
-    [initialProducts],
+    () => debounce(filterProducts, 300),
+    [filterProducts],
   )
 
   // Handle category changes
@@ -55,23 +70,16 @@ export function useProductFilter({ initialProducts }: UseProductFilterProps) {
     (selectedCategories: string[]) => {
       setActiveCategories(selectedCategories)
 
-      // If no initial products, skip filtering
-      if (initialProducts.length === 0) {
-        console.warn('No products available for category filtering')
-        setFilteredProductsData([])
-        return
-      }
+      if (!validateProducts()) return
 
-      // If no categories selected, show all products
       if (selectedCategories.length === 0) {
         setFilteredProductsData(initialProducts)
         return
       }
 
-      // Trigger debounced filter
       debouncedFilter(searchQuery, selectedCategories)
     },
-    [searchQuery, initialProducts, debouncedFilter],
+    [searchQuery, initialProducts, debouncedFilter, validateProducts],
   )
 
   // Handle search changes
@@ -79,32 +87,22 @@ export function useProductFilter({ initialProducts }: UseProductFilterProps) {
     (query: string) => {
       setSearchQuery(query)
 
-      // If no initial products, skip filtering
-      if (initialProducts.length === 0) {
-        console.warn('No products available for search filtering')
-        setFilteredProductsData([])
-        return
-      }
+      if (!validateProducts()) return
 
-      // If no query, show all products or filtered by categories
       if (!query.trim()) {
         if (activeCategories.length > 0) {
-          // Filter by existing categories
           debouncedFilter('', activeCategories)
         } else {
-          // Show all products
           setFilteredProductsData(initialProducts)
         }
         return
       }
 
-      // Trigger debounced filter
       debouncedFilter(query, activeCategories)
     },
-    [activeCategories, initialProducts, debouncedFilter],
+    [activeCategories, initialProducts, debouncedFilter, validateProducts],
   )
 
-  // Reset filters
   const resetFilters = useCallback(() => {
     setSearchQuery('')
     setActiveCategories([])

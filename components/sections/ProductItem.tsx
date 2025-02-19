@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { memo } from 'react'
+import { StyleSheet } from 'react-native'
 import { Box } from '../ui/Box'
 import { ThemedText } from '../ThemedText'
 import { Image } from '../ui/Image'
-import { Product } from '@/interfaces/product'
+import type { Product } from '@/interfaces/product'
 
 interface ProductItemProps extends Product {
   id: number
@@ -11,7 +12,37 @@ interface ProductItemProps extends Product {
   price: number
   image: string
 }
-export function ProductItem({
+const styles = StyleSheet.create({
+  container: {
+    borderBottomWidth: 1,
+    borderColor: '#cccccc',
+    paddingVertical: 10,
+  },
+  content: {
+    flex: 1,
+    paddingRight: 10,
+  },
+  title: {
+    color: '#000000',
+    fontFamily: 'Karla-Bold',
+  },
+  description: {
+    paddingVertical: 5,
+    color: '#495e57',
+    fontFamily: 'Karla-Medium',
+  },
+  price: {
+    color: '#EE9972',
+    fontFamily: 'Karla-Medium',
+  },
+  image: {
+    width: 100,
+    height: 100,
+    borderRadius: 10,
+  },
+})
+
+export const ProductItem = memo(function ProductItem({
   name,
   description,
   price,
@@ -22,50 +53,22 @@ export function ProductItem({
       flexDirection="row"
       justifyContent="space-between"
       alignItems="center"
-      style={{
-        borderBottomWidth: 1,
-        borderColor: '#cccccc',
-        paddingVertical: 10,
-      }}>
-      <Box style={{ flex: 1, paddingRight: 10 }}>
-        <ThemedText
-          type="subtitle"
-          style={{
-            color: '#000000',
-            fontFamily: 'Karla-Bold',
-          }}>
+      style={styles.container}>
+      <Box style={styles.content}>
+        <ThemedText type="subtitle" style={styles.title}>
           {name}
         </ThemedText>
-        <ThemedText
-          style={{
-            paddingVertical: 5,
-            color: '#495e57',
-            fontFamily: 'Karla-Medium',
-          }}>
-          {description}
-        </ThemedText>
-        <ThemedText
-          style={{
-            color: '#EE9972',
-            fontFamily: 'Karla-Medium',
-          }}>
-          ${price}
-        </ThemedText>
+        <ThemedText style={styles.description}>{description}</ThemedText>
+        <ThemedText style={styles.price}>${price}</ThemedText>
       </Box>
 
       <Image
         resizeMode="cover"
-        style={{
-          width: 100,
-          height: 100,
-          borderRadius: 10,
-        }}
-        source={{
-          uri: image,
-        }}
+        style={styles.image}
+        source={{ uri: image }}
         accessible
         accessibilityLabel={`Image of ${name}`}
       />
     </Box>
   )
-}
+})

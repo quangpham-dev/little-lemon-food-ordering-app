@@ -83,7 +83,7 @@ export const useProfile = (onSaveSuccess?: () => void) => {
     }
 
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images', 'videos'],
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,

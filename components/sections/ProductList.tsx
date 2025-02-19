@@ -1,10 +1,10 @@
 import React, { useCallback, useMemo } from 'react'
 import {
   FlatList,
-  ListRenderItemInfo,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
   RefreshControl,
+  type ListRenderItemInfo,
+  type NativeSyntheticEvent,
+  type NativeScrollEvent,
 } from 'react-native'
 
 import { Hero } from '@/components/sections/Hero'
@@ -12,7 +12,7 @@ import { OrderCategories } from '@/components/sections/OrderCategories'
 import { ProductItem } from '@/components/sections/ProductItem'
 import { ThemedView } from '@/components/ThemedView'
 import { ThemedText } from '@/components/ThemedText'
-import { Product } from '@/interfaces/product'
+import type { Product } from '@/interfaces/product'
 
 interface ProductListProps {
   productData: Product[]
@@ -23,7 +23,6 @@ interface ProductListProps {
   onRefreshPage?: () => Promise<void>
   onCategoryChange?: (categories: string[]) => void
   onResetFilters?: () => void
-  listHeaderComponent?: React.ReactNode
 }
 
 export function ProductList({

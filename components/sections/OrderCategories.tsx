@@ -15,22 +15,31 @@ export function OrderCategories({
 }: OrderCategoriesProps) {
   const handleCategoryPress = useCallback(
     (category: string) => {
-      let newSelectedCategories: string[]
+      const newSelectedCategories = activeCategories.includes(category)
+        ? activeCategories.filter(
+            selectedCategory => selectedCategory !== category,
+          )
+        : [...activeCategories, category]
 
-      if (activeCategories.includes(category)) {
-        // Remove category if already selected
-        newSelectedCategories = activeCategories.filter(
-          selectedCategory => selectedCategory !== category,
-        )
-      } else {
-        // Add category if not selected
-        newSelectedCategories = [...activeCategories, category]
-      }
-
-      // Call the callback with updated categories
       onCategoryChange?.(newSelectedCategories)
     },
     [activeCategories, onCategoryChange],
+  )
+
+  const getCategoryStyle = useCallback(
+    (category: string) => [
+      styles.categoryButton,
+      activeCategories.includes(category) && styles.selectedCategoryButton,
+    ],
+    [activeCategories],
+  )
+
+  const getCategoryTextStyle = useCallback(
+    (category: string) => [
+      styles.categoryText,
+      activeCategories.includes(category) && styles.selectedCategoryText,
+    ],
+    [activeCategories],
   )
 
   return (
@@ -38,18 +47,9 @@ export function OrderCategories({
       {categories.map(category => (
         <TouchableOpacity
           key={category}
-          style={[
-            styles.categoryButton,
-            activeCategories.includes(category) &&
-              styles.selectedCategoryButton,
-          ]}
+          style={getCategoryStyle(category)}
           onPress={() => handleCategoryPress(category)}>
-          <ThemedText
-            style={[
-              styles.categoryText,
-              activeCategories.includes(category) &&
-                styles.selectedCategoryText,
-            ]}>
+          <ThemedText style={getCategoryTextStyle(category)}>
             {category}
           </ThemedText>
         </TouchableOpacity>
