@@ -8,7 +8,7 @@ import { StorageKeys } from '@/constants'
 import { useAuth } from './use-auth'
 
 export const useProfile = (onSaveSuccess?: () => void) => {
-  const { user } = useAuth()
+  const { user, updateUser } = useAuth()
   const [profile, setProfile] = useState<User>({
     firstName: '',
     lastName: '',
@@ -124,11 +124,8 @@ export const useProfile = (onSaveSuccess?: () => void) => {
         newsletter: profile.newsletter,
       }
 
-      // Save to AsyncStorage
-      await AsyncStorage.setItem(
-        StorageKeys.USER_INFO,
-        JSON.stringify(userData),
-      )
+      // Update user in context and AsyncStorage
+      await updateUser(userData)
 
       // Optional callback on successful save
       onSaveSuccess?.()
@@ -141,7 +138,7 @@ export const useProfile = (onSaveSuccess?: () => void) => {
       )
       return false
     }
-  }, [profile, onSaveSuccess])
+  }, [profile, onSaveSuccess, updateUser])
 
   return {
     profile,

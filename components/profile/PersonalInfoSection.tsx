@@ -1,5 +1,7 @@
 import React from 'react'
-import { View, Text, TextInput, StyleSheet } from 'react-native'
+
+import { ThemedText } from '@/components/ThemedText'
+import { Input } from '../ui/Input'
 
 interface PersonalInfoSectionProps {
   firstName: string
@@ -17,66 +19,40 @@ export const PersonalInfoSection: React.FC<PersonalInfoSectionProps> = ({
   onUpdateProfile,
 }) => {
   return (
-    <View>
-      <Text style={styles.sectionTitle}>Personal information</Text>
+    <>
+      <ThemedText type="titleBlack" style={{ marginBottom: 16, marginTop: 8 }}>
+        Personal information
+      </ThemedText>
 
-      <Text style={styles.label}>First name</Text>
-      <TextInput
-        style={styles.input}
+      <Input
+        label="First name"
         value={firstName}
         onChangeText={value => onUpdateProfile('firstName', value)}
         placeholder="First Name"
       />
 
-      <Text style={styles.label}>Last name</Text>
-      <TextInput
-        style={styles.input}
+      <Input
+        label="Last name"
         value={lastName}
         onChangeText={value => onUpdateProfile('lastName', value)}
         placeholder="Last Name"
       />
 
-      <Text style={styles.label}>Email</Text>
-      <TextInput
-        style={styles.input}
+      <Input
+        label="Email"
         value={email}
         onChangeText={value => onUpdateProfile('email', value)}
         placeholder="Email"
         keyboardType="email-address"
       />
 
-      <Text style={styles.label}>Phone number</Text>
-      <TextInput
-        style={styles.input}
+      <Input
+        label="Phone number"
         value={phoneNumber}
         onChangeText={value => onUpdateProfile('phoneNumber', value)}
         placeholder="(217) 555-0113"
         keyboardType="phone-pad"
       />
-    </View>
+    </>
   )
 }
-
-const styles = StyleSheet.create({
-  sectionTitle: {
-    fontFamily: 'Karla-Bold',
-    fontSize: 20,
-    color: '#333',
-    marginBottom: 16,
-    marginTop: 8,
-  },
-  label: {
-    fontFamily: 'Karla-Medium',
-    fontSize: 14,
-    color: '#495E57',
-    marginBottom: 8,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#EDEFEE',
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 16,
-    fontSize: 16,
-  },
-})

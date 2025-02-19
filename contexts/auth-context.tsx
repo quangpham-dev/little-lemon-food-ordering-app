@@ -10,6 +10,7 @@ interface AuthContextType {
   user: User | null
   onboard: (userData: User) => Promise<void>
   logout: () => Promise<void>
+  updateUser: (userData: Partial<User>) => Promise<void>
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -26,7 +27,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const checkAuthStatus = async () => {
     try {
       const userData = await AsyncStorage.getItem(StorageKeys.USER_INFO)
-      console.log('userData', userData)
       if (userData) {
         setUser(JSON.parse(userData))
         setIsAuthenticated(true)
@@ -53,6 +53,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
+  const updateUser = useCallback(
+    async (userData: Partial<User>) => {
+      try {
+        // Merge new data with existing user data
+        const updatedUser = user ? { ...user, ...userData } : userData
+
+        // Save to AsyncStorage
+        await AsyncStorage.setItem(
+          StorageKeys.USER_INFO,
+          JSON.stringify(updatedUser),
+        )
+
+        // Update user state
+        setUser(updatedUser as User)
+      } catch (error) {
+        console.error('Error updating user:', error)
+        throw error
+      }
+    },
+    [user],
+  )
+
   const logout = useCallback(async () => {
     try {
       await AsyncStorage.removeItem(StorageKeys.USER_INFO)
@@ -72,8 +94,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       user,
       onboard,
       logout,
+      updateUser,
     }),
-    [isAuthenticated, isLoading, user, onboard, logout],
+    [isAuthenticated, isLoading, user, onboard, logout, updateUser],
   )
 
   return (
